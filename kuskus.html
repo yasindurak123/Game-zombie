@@ -11,7 +11,7 @@
 <body>
   <script src="https://koda.nu/simple.js">
 
-    var zombies = [];
+    let zombies = [];
 
     var i = 0;
 
@@ -34,6 +34,7 @@
     hideMouse();
 
     function update() {
+    
       fill("orange");
       picture(player.x, player.y, "./images/pixil.png")
 
@@ -46,6 +47,11 @@
       if (keyboard.s)
         player.y += 7;
 
+
+      if (player.y < 0) { player.y = 0; }
+      if (player.y >= totalHeight - 100) { player.y = totalHeight - 100; }
+      if (player.x < 0) { player.x = 0; }
+      if (player.x >= totalWidth - 90) { player.x = totalWidth - 90; }
       var i = 0;
 
       while (i < 5) {
@@ -53,6 +59,10 @@
 
         picture(zombie.x, zombie.y, "./images/pix.png");
 
+        if (zombie.y < 0) { zombie.y = 0; }
+        if (zombie.y >= totalHeight - 100) { zombie.y = totalHeight - 100; }
+        if (zombie.x < 0) { zombie.x = 0; }
+        if (zombie.x >= totalWidth - 90) { zombie.x = totalWidth - 90; }
         if (zombie.x < player.x)
           zombie.x += zombie.speed;
         else
