@@ -76,7 +76,7 @@
     player.y += player.speed;
 
   }
-        
+        // gör att crabbyPatty kan spawnas
   if (distance(player, crabbyPatty) <= player.radius + 16 && !crabbyPatty.active && !crabbyPatty.active) {
 				crabbyPatty.active = true;
 			}
@@ -123,11 +123,12 @@
         if (player.iframes > 0){
           player.iframes--;
         }
+        //gör dmg på spelaren
         if (distance(player, zombie) < 10 && player.iframes === 0) {
           player.health--;
           player.iframes = 60;
         }
-
+          //gör att crabbypatty kan döda zombies med att trycka space
         if(keyboard.space && crabbyPatty.active){
     for (let i = 0; i < zombies.length; i++) {
     const zombie = zombies[i];
@@ -146,7 +147,7 @@
       }); 
       break;
     }}}
-
+      //om spelares liv blir noll så slutar spelet
         if (player.health == 0) {
           music.pause();
           var playerdeathsound = new Audio("./music/playerdeath.mp3")

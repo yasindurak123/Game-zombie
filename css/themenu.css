@@ -7,7 +7,7 @@
       margin: 0;
       background-color: aqua;
     }
-    
+    /*Centrerar texten*/
     h1 {
       color: orange;
       text-align: center;
@@ -15,7 +15,7 @@
       margin-bottom: 50px;
     }
     
-    
+    /*lägger dom upp till ner*/
     ul {
       list-style: none;
       padding: 0;
