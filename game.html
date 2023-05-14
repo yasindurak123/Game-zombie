@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>game zombie</title>
+</head>
+
+<body>
+  <script src="https://koda.nu/simple.js">
+
+    //variabler
+    let zombies = [];
+    let score=0;
+    let playerhealth=200;
+    let zombiehealth=100;
+    let crabbyPattycooldown=0;
+    let powerupcooldown=0;
+    let powerupactive=false;
+    var i = 0;
+    
+   
+
+    while (i < 7) {
+      zombies.push({
+        x: random(totalWidth),
+        y: random(totalHeight),
+        speed: random(1, 7),
+        radius: 35,
+        health:3,
+      });
+      i++;
+    }
+
+
+    
+
+    let player = { x: 100, y: 100, size: 100, speed:15, health: 3, iframes: 0,radius:35 };
+    
+    hideMouse();
+    //crabbyPatty som är mitt powerup för spelet
+    let crabbyPatty = {
+			x: random(totalWidth),
+			y: random(totalHeight),
+			active: false
+		};
+    var music= new Audio("./music/mu.mp3");
+      
+    function update() {
+      picture(0,0,"./images/backgorund.webp",);
+      picture(player.x, player.y, "./images/pixil.png");
+      rectangle(player.x-5,player.y-10,player.health * 30,10,"red");
+
+        //gör att desto längre jag överlever så går poängen upp med 1
+      score += 1;
+    text(10, 20, 20, "Score: " + score, "white");
+    music.play();  
+
+    if (crabbyPattycooldown > 0) {
+				crabbyPattycooldown--;
+			}
+
+     //rörelse
+     if (keyboard.d) {
+    player.x += player.speed;
+  }
+  if (keyboard.a) {
+    player.x -= player.speed;
+  }
+  if (keyboard.w) {
+    player.y -= player.speed;
+  }
+  if (keyboard.s) {
+    player.y += player.speed;
+
+  }
+        
+  if (distance(player, crabbyPatty) <= player.radius + 16 && !crabbyPatty.active && !crabbyPatty.active) {
+				crabbyPatty.active = true;
+			}
+      if(crabbyPatty.active){
+        picture(player.x +80,player.y +30,"./images/crabbypatty.png",70,70);
+      }
+      if(!crabbyPatty.active){
+        picture(crabbyPatty.x,crabbyPatty.y,"./images/crabbypatty.png",70,70);
+      }
+      //collision för poweruppen
+      if (crabbyPatty.y < 0) { crabbyPatty.y = 0; }
+      if (crabbyPatty.y >= totalHeight - 100) { crabbyPatty.y = totalHeight - 100; }
+      if (crabbyPatty.x < 0) { crabbyPatty.x = 0; }
+      if (crabbyPatty.x >= totalWidth - 90) { crabbyPatty.x = totalWidth - 90; }
+
+      
+        //collision för player//
+      if (player.y < 0) { player.y = 0; }
+      if (player.y >= totalHeight - 100) { player.y = totalHeight - 100; }
+      if (player.x < 0) { player.x = 0; }
+      if (player.x >= totalWidth - 90) { player.x = totalWidth - 90; }
+
+      var i = 0;
+      while (i < zombies.length) {
+        var zombie = zombies[i];
+        picture(zombie.x, zombie.y, "./images/pix.png");
+        rectangle(zombie.x-5,zombie.y-10,zombiehealth,10,"green"); 
+        //collision for zombies
+        if (zombie.y < 0) { zombie.y = 0; }
+        if (zombie.y >= totalHeight - 100) { zombie.y = totalHeight - 100; }
+        if (zombie.x < 0) { zombie.x = 0; }
+        if (zombie.x >= totalWidth - 90) { zombie.x = totalWidth - 90; }
+        if (zombie.x < player.x)
+
+          zombie.x += zombie.speed;
+        else
+          zombie.x -= zombie.speed;
+
+        if (zombie.y < player.y)
+          zombie.y += zombie.speed;
+        else
+          zombie.y -= zombie.speed;
+
+        if (player.iframes > 0){
+          player.iframes--;
+        }
+        if (distance(player, zombie) < 10 && player.iframes === 0) {
+          player.health--;
+          player.iframes = 60;
+        }
+
+        if(keyboard.space && crabbyPatty.active){
+    for (let i = 0; i < zombies.length; i++) {
+    const zombie = zombies[i];
+
+    if(distance(player, zombie) <= 70) {
+      zombies.splice(i, 1);
+      var deathsound = new Audio("./music/zombiedeath.mp3")
+      deathsound.play();
+      //spawnar in nya zombies när dom är död
+      zombies.push({   
+        x: random(totalWidth),
+        y: random(totalHeight),
+        speed: random(1,7),
+        radius:35,
+        health:100,
+      }); 
+      break;
+    }}}
+
+        if (player.health == 0) {
+          music.pause();
+          var playerdeathsound = new Audio("./music/playerdeath.mp3")
+          playerdeathsound.play()
+          text(100, 100, 100, "GAME OVER", "red");
+          showMouse();
+          stopUpdate();
+          
+        }
+        i += 1;
+      }}
+      
+  
+  </script>
+</body>
+
+</html>
